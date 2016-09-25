@@ -1,6 +1,7 @@
 \title{ARCHER Scripts}
 \author{
   Tomas Lazauskas \\
+  t.lazauskas@ucl.ac.uk \\
   University College London \\
   lazauskas.net
 }
@@ -15,26 +16,58 @@
 The help file of the set of scripts to execute jobs on ARCHER (UK's National Supercomputing Service)
 \end{abstract}
 
-\section{Introduction}
-This is time for all good men to come to the aid of their party!
+\section{JobArray.bash}
 
-\paragraph{Outline}
-The remainder of this article is organized as follows.
-Section~\ref{previous work} gives account of previous work.
-Our new and exciting results are described in Section~\ref{results}.
-Finally, Section~\ref{conclusions} gives the conclusions.
+A simple job array script to execute many fhi-aims calculations using the same settings (i.e. the same control.in file).
 
-\section{Previous work}\label{previous work}
-A much longer \LaTeXe{} example was written by Gil~\cite{Gil:02}.
+An example is provided in the examples directory (Examples/JobArray).
 
-\section{Results}\label{results}
-In this section we describe the results.
+\subsection{Requirements}
 
-\section{Conclusions}\label{conclusions}
-We worked hard, and achieved very little.
+\begin{itemize}
 
-\bibliographystyle{abbrv}
-\bibliography{simple}
+  \item input (directory):
+  A directory where the system files and control files have to be saved.
+  
+  \item input/control.in (file):
+  A standard control.in FHI-aims input file where the basis set and the computational parameters are set. The control file must be saved in the input subdirectory
+  
+  \item input/*.xyz (files):
+  A set of xyz type structure files which will be optimised/evaluated with FHI-aims. At the moment the script only works with \underline{nanocluster} type systems. If you would like to use it for periodic systems, please do not hesitate to contact me and I will make the changes.
+  
+  \item JobArray.bash (file)
+  The main job array script which will pre-process the xyz files, prepare the directories and execute FHI-aims simulations. The results will be saved in the output directory. 
+   
+\end{itemize}
+
+\subsection{Preparation}
+\begin{itemize}
+  \item Preparing directories and files: \\
+  Copy the main JobArray.bash file and create a new directory "input" in the dedicated directory on Archer. 
+  Save all the structure that you would like to optimise/evaluate with FHI-aims in the new input directory. 
+  Save the control.in file in the input directory.
+  \item Setting the Archer job options: \\
+  Modify the JobArray.bash accordingly:
+  \begin{itemize}
+  
+  \item number of nodes (line 5) \\
+  e.g. \#PBS -l select=5 \\
+  will request 5 nodes (120 cores)
+  
+  \item Project code (line 9) \\
+  e.g. \#PBS -A projectX
+  \\ the project code against which the job will be charged is set as "projectX"
+  
+  \item number of cores per FHI-aims simulation (line 80) \\
+  e.g. aprun -n 24 aims $>$ FHIaims\$\{i\}.out \&
+  \\  each fhi-aims simulation will use 24 cores (1 node) and 5 simulations will be run at same time. It is important to make sure that the total requested number of cores is divisible by the number of cores per simulation to ensure the efficient use of the computational resources.
+  
+  \end{itemize}
+\end{itemize}
+
+\subsection{Execution}
+
+Simply by qsub'ing the JobArray.bash file
 
 \end{document}
-This is never printed
+
