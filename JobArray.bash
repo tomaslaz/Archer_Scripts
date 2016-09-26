@@ -77,7 +77,7 @@ for entry in `ls $search_dir`; do
 	if [ -d "$entry" ] ; then
 	  cd $entry
 	  echo $entry
-	  aprun -n 48 aims > FHIaims${i}.out &
+	  aprun -n 24 aims > FHIaims${i}.out &
 	  
 	  cd ..
 	fi
