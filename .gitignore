@@ -1,3 +1,9 @@
 # tex temp files
 *.aux
 *.log
+
+# project files
+.project
+
+# DS_Store files
+.DS_Store
