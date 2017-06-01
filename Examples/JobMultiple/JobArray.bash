@@ -1,7 +1,7 @@
 #!/bin/bash --login
 
 # PBS job options (name, compute nodes, job time)
-#PBS -N TomasJobArray
+#PBS -N TomasJobMulti
 #PBS -l select=5
 #PBS -l walltime=00:01:00
 
